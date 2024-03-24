@@ -1,0 +1,61 @@
+package types
+
+import (
+	"github.com/fbsobreira/gotron-sdk/pkg/address"
+)
+
+type Block struct {
+	BlockID     string `json:"blockID"`
+	BlockHeader struct {
+		WitnessSignature string `json:"witness_signature"`
+		RawData          struct {
+			Number         uint64      `json:"number"`
+			TxTrieRoot     string      `json:"txTrieRoot"`
+			WitnessAddress TronAddress `json:"witness_address"`
+			ParentHash     string      `json:"parentHash"`
+			Version        int64       `json:"version"`
+			Timestamp      uint64      `json:"timestamp"`
+		} `json:"raw_data"`
+	} `json:"block_header"`
+
+	Transactions []Transaction `json:"transactions"`
+}
+
+type TronAddress struct {
+	Address address.Address
+}
+
+// UnmarshalJSON 实现 UnmarshalJSON 方法
+func (t TronAddress) UnmarshalJSON(data []byte) (err error) {
+	// 赋值给Address
+	t.Address = data
+	return
+}
+
+// MarshalJSON 实现 MarshalJSON 方法
+func (t TronAddress) MarshalJSON() ([]byte, error) {
+	return []byte(t.Address.String()), nil
+}
+
+func (t TronAddress) String() string {
+	return t.Address.String()
+}
+
+func AddressByBase58(val string) TronAddress {
+	toAddress, err := address.Base58ToAddress(val)
+	if err != nil {
+		return TronAddress{
+			Address: nil,
+		}
+	}
+	return TronAddress{
+		Address: toAddress,
+	}
+}
+
+func AddressByHex(val string) TronAddress {
+	toAddress := address.HexToAddress(val)
+	return TronAddress{
+		Address: toAddress,
+	}
+}

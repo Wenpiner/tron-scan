@@ -1,0 +1,15 @@
+Name: tron-api
+Host: 0.0.0.0
+Port: 8888
+
+RabbitConf:
+  Host: ${RABBITMQ_HOST}
+  Port: ${RABBITMQ_PORT}
+  Scheme: ${RABBITMQ_SCHEME}
+  Username: ${RABBITMQ_USERNAME}
+  Password: ${RABBITMQ_PASSWORD}
+  VHost: ${RABBITMQ_VHOST}
+MQ:
+  BlockExchangeName: ${RABBITMQ_BLOCK_EXCHANGE_NAME}
+  RouteKey: ${RABBITMQ_ROUTE_KEY}
+APIKey: ${API_KEY}
