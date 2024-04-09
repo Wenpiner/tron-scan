@@ -2,12 +2,13 @@ package tron
 
 import (
 	"errors"
-	"github.com/go-resty/resty/v2"
-	"github.com/zeromicro/go-zero/core/logx"
 	"math/rand"
 	"strings"
 	"time"
 	"tronScan/internal/types"
+
+	"github.com/go-resty/resty/v2"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type Poll struct {
@@ -99,6 +100,7 @@ func (t *Poll) Stop() {
 
 // 获取当前块
 func (t *Poll) getBlock(num int64) (*types.Block, error) {
+	logx.Infof("获取块:%d", num)
 	request := map[string]interface{}{
 		"visible": true,
 		"num":     num,

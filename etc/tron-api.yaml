@@ -16,3 +16,7 @@ MQ:
   TransactionRouteKey: ${RABBITMQ_TRANSACTION_ROUTE_KEY}
 
 APIKey: ${API_KEY}
+
+Log:
+  Encoding: plain
+  Stat: false

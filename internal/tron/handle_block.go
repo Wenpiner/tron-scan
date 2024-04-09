@@ -3,12 +3,13 @@ package tron
 import (
 	"context"
 	"encoding/json"
-	"github.com/rabbitmq/amqp091-go"
-	"github.com/wenpiner/rabbitmq-go"
-	"github.com/zeromicro/go-zero/core/logx"
 	"tronScan/internal/config"
 	"tronScan/internal/svc"
 	"tronScan/internal/types"
+
+	"github.com/rabbitmq/amqp091-go"
+	"github.com/wenpiner/rabbitmq-go"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type HandleBlock struct {
@@ -75,7 +76,7 @@ func (t *HandleBlock) Handle(block types.Block) {
 		logx.Errorf("序列化消息失败: %v", err)
 		return
 	}
-
+	logx.Infof("处理块:%d", block.BlockHeader.RawData.Number)
 	err = channel.PublishWithContext(
 		context.Background(), t.config.MQ.BlockExchangeName, t.config.MQ.BlockRouteKey, false, false, amqp091.Publishing{
 			ContentType: "application/json",
