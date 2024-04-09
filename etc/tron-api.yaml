@@ -3,13 +3,16 @@ Host: 0.0.0.0
 Port: 8888
 
 RabbitConf:
+  Username: ${RABBITMQ_USER}
+  Password: ${RABBITMQ_PASS}
   Host: ${RABBITMQ_HOST}
   Port: ${RABBITMQ_PORT}
+  Vhost: ${RABBITMQ_VHOST}
   Scheme: ${RABBITMQ_SCHEME}
-  Username: ${RABBITMQ_USERNAME}
-  Password: ${RABBITMQ_PASSWORD}
-  VHost: ${RABBITMQ_VHOST}
 MQ:
   BlockExchangeName: ${RABBITMQ_BLOCK_EXCHANGE_NAME}
-  RouteKey: ${RABBITMQ_ROUTE_KEY}
+  BlockRouteKey: ${RABBITMQ_BLOCK_ROUTE_KEY}
+  TransactionExchangeName: ${RABBITMQ_TRANSACTION_EXCHANGE_NAME}
+  TransactionRouteKey: ${RABBITMQ_TRANSACTION_ROUTE_KEY}
+
 APIKey: ${API_KEY}

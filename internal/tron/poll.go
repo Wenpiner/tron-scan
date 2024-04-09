@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/go-resty/resty/v2"
 	"github.com/zeromicro/go-zero/core/logx"
+	"math/rand"
+	"strings"
 	"time"
 	"tronScan/internal/types"
 )
@@ -17,17 +19,33 @@ type Poll struct {
 	done chan struct{}
 	// 当前块高
 	currentBlockNum int64
+	// apis
+	apis []string
+}
+
+func (t *Poll) randKey() string {
+	index := rand.Intn(len(t.apis))
+
+	if len(t.apis) == 1 {
+		index = 0
+	}
+	return t.apis[index]
 }
 
 // NewTronPoll creates a new Poll instance
 func NewTronPoll(apiKey string, blockChan chan types.Block) *Poll {
+	keys := strings.Split(apiKey, ",")
+	if len(keys) == 0 {
+		logx.Error("未配置API KEY")
+		return nil
+	}
 	client := resty.New()
-	client.SetHeader("TRON-PRO-API-KEY", apiKey)
 	// 设置超时时间
 	client.SetTimeout(3 * time.Second)
 	return &Poll{
 		client:    client,
 		blockChan: blockChan,
+		apis:      keys,
 	}
 }
 
@@ -87,7 +105,7 @@ func (t *Poll) getBlock(num int64) (*types.Block, error) {
 	}
 	url := "https://api.trongrid.io/wallet/getblockbynum"
 	var block types.Block
-	response, err := t.client.R().SetResult(&block).SetBody(request).Post(url)
+	response, err := t.client.SetHeader("TRON-PRO-API-KEY", t.randKey()).R().SetResult(&block).SetBody(request).Post(url)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +122,7 @@ func (t *Poll) getNowBlock() (*types.Block, error) {
 	}
 	url := "https://api.trongrid.io/wallet/getnowblock"
 	var block types.Block
-	response, err := t.client.R().SetResult(&block).SetBody(request).Post(url)
+	response, err := t.client.SetHeader("TRON-PRO-API-KEY", t.randKey()).R().SetResult(&block).SetBody(request).Post(url)
 	if err != nil {
 		return nil, err
 	}

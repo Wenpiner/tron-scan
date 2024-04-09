@@ -10,7 +10,9 @@ type Config struct {
 	RabbitConf conf.RabbitConf
 	APIKey     string
 	MQ         struct {
-		BlockExchangeName string
-		RouteKey          string
+		BlockExchangeName       string
+		BlockRouteKey           string
+		TransactionExchangeName string
+		TransactionRouteKey     string
 	}
 }

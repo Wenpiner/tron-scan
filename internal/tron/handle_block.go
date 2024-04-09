@@ -77,7 +77,7 @@ func (t *HandleBlock) Handle(block types.Block) {
 	}
 
 	err = channel.PublishWithContext(
-		context.Background(), t.config.MQ.BlockExchangeName, t.config.MQ.RouteKey, false, false, amqp091.Publishing{
+		context.Background(), t.config.MQ.BlockExchangeName, t.config.MQ.BlockRouteKey, false, false, amqp091.Publishing{
 			ContentType: "application/json",
 			Body:        blockByte,
 		},
@@ -114,7 +114,7 @@ func (t *HandleBlock) Handle(block types.Block) {
 				}
 				transactionByte, _ := json.Marshal(baseMessageTx)
 				err := channel.PublishWithContext(
-					context.Background(), t.config.MQ.BlockExchangeName, t.config.MQ.RouteKey, false, false, amqp091.Publishing{
+					context.Background(), t.config.MQ.TransactionExchangeName, t.config.MQ.TransactionRouteKey, false, false, amqp091.Publishing{
 						ContentType: "application/json",
 						Body:        transactionByte,
 					},
