@@ -112,6 +112,9 @@ func (t *Poll) getBlock(num int64) (*types.Block, error) {
 		return nil, err
 	}
 	if response.IsSuccess() {
+		if block.BlockHeader.RawData.Number == 0 {
+			return nil, errors.New("block not found")
+		}
 		return &block, nil
 	} else {
 		return nil, errors.New(response.String())
