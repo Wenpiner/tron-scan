@@ -87,7 +87,12 @@ func (t *HandleBlock) Handle(block types.Block) {
 		logx.Errorf("发送块消息失败: %v", err)
 		return
 	}
-
+	channelTransfer, err := t.Rabbit.Channel()
+	if err != nil {
+		logx.Errorf("获取消息队列通道失败: %v", err)
+		return
+	}
+	defer channelTransfer.Close()
 	// 检查所有交易
 	for _, tx := range block.Transactions {
 		if len(tx.Rets) == 1 {
@@ -114,7 +119,7 @@ func (t *HandleBlock) Handle(block types.Block) {
 					continue
 				}
 				transactionByte, _ := json.Marshal(baseMessageTx)
-				err := channel.PublishWithContext(
+				err := channelTransfer.PublishWithContext(
 					context.Background(), t.config.MQ.TransactionExchangeName, t.config.MQ.TransactionRouteKey, false, false, amqp091.Publishing{
 						ContentType: "application/json",
 						Body:        transactionByte,
