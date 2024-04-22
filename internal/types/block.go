@@ -70,6 +70,11 @@ func AddressByHex(val string) TronAddress {
 		return TronAddress{}
 	}
 	newByte := removeZeroBytes(decodeString)
+	// 判断开头是否为41,如果不是则加在最前面
+	if newByte[0] != 0x41 {
+		newByte = append([]byte{0x41}, newByte...)
+	}
+
 	return TronAddress{
 		Address: newByte,
 	}
