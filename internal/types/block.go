@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/hex"
 	"github.com/fbsobreira/gotron-sdk/pkg/address"
 )
 
@@ -53,9 +54,23 @@ func AddressByBase58(val string) TronAddress {
 	}
 }
 
+// 除去bytes前面的0值
+func removeZeroBytes(bytes []byte) []byte {
+	for i, b := range bytes {
+		if b != 0 {
+			return bytes[i:]
+		}
+	}
+	return nil
+}
+
 func AddressByHex(val string) TronAddress {
-	toAddress := address.HexToAddress(val)
+	decodeString, err := hex.DecodeString(val)
+	if err != nil {
+		return TronAddress{}
+	}
+	newByte := removeZeroBytes(decodeString)
 	return TronAddress{
-		Address: toAddress,
+		Address: newByte,
 	}
 }
