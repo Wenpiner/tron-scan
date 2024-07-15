@@ -2,6 +2,7 @@ package tron
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -42,7 +43,7 @@ func NewTronPoll(apiKey string, blockChan chan types.Block) *Poll {
 	}
 	client := resty.New()
 	// 设置超时时间
-	client.SetTimeout(3 * time.Second)
+	client.SetTimeout(10 * time.Second)
 	return &Poll{
 		client:    client,
 		blockChan: blockChan,
@@ -100,23 +101,25 @@ func (t *Poll) Stop() {
 
 // 获取当前块
 func (t *Poll) getBlock(num int64) (*types.Block, error) {
-	logx.Infof("获取块:%d", num)
 	request := map[string]interface{}{
 		"visible": true,
 		"num":     num,
 	}
-	url := "https://api.trongrid.io/wallet/getblockbynum"
+	url := fmt.Sprintf(`https://go.getblock.io/%s/wallet/getblockbynum`, t.randKey())
 	var block types.Block
 	response, err := t.client.SetHeader("TRON-PRO-API-KEY", t.randKey()).R().SetResult(&block).SetBody(request).Post(url)
 	if err != nil {
+		logx.Errorf("获取块失败:%v", err)
 		return nil, err
 	}
 	if response.IsSuccess() {
+		logx.Infof("请求块:%d 当前块:%d", num, block.BlockHeader.RawData.Number)
 		if block.BlockHeader.RawData.Number == 0 {
 			return nil, errors.New("block not found")
 		}
 		return &block, nil
 	} else {
+		logx.Errorf("获取块失败:%v", response.String())
 		return nil, errors.New(response.String())
 	}
 }
@@ -125,7 +128,7 @@ func (t *Poll) getNowBlock() (*types.Block, error) {
 	request := map[string]interface{}{
 		"visible": true,
 	}
-	url := "https://api.trongrid.io/wallet/getnowblock"
+	url := fmt.Sprintf(`https://go.getblock.io/%s/wallet/getnowblock`, t.randKey())
 	var block types.Block
 	response, err := t.client.SetHeader("TRON-PRO-API-KEY", t.randKey()).R().SetResult(&block).SetBody(request).Post(url)
 	if err != nil {

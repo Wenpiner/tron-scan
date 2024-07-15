@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/hex"
+
 	"github.com/fbsobreira/gotron-sdk/pkg/address"
 )
 
@@ -70,6 +71,9 @@ func AddressByHex(val string) TronAddress {
 		return TronAddress{}
 	}
 	newByte := removeZeroBytes(decodeString)
+	if len(newByte) == 0 {
+		return TronAddress{}
+	}
 	// 判断开头是否为41,如果不是则加在最前面
 	if newByte[0] != 0x41 {
 		newByte = append([]byte{0x41}, newByte...)

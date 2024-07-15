@@ -2,8 +2,6 @@ package types
 
 import (
 	"strconv"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 // AccountCreateContract, TransferContract, TransferAssetContract, VoteAssetContract, VoteWitnessContract,
@@ -53,7 +51,6 @@ func NewTriggerSmartContract(value map[string]interface{}) *TriggerSmartContract
 	if contract.DataInfo.FunctionName == "a9059cbb" {
 		// 截取8 - 72位
 		contract.DataInfo.ToAddress = AddressByHex(contract.Data[8:72])
-		logx.Infof("TRC20 - 地址:%v", contract.DataInfo.ToAddress.String())
 		// 截取72位后面的64位
 		amountHex := contract.Data[72 : 72+64]
 		// 将16进制转换为10进制
