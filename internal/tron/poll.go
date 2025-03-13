@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"net"
+	"net/http"
 	"strings"
 	"time"
 	"tronScan/internal/types"
@@ -43,7 +45,19 @@ func NewTronPoll(apiKey string, blockChan chan types.Block) *Poll {
 	}
 	client := resty.New()
 	// 设置超时时间
-	client.SetTimeout(10 * time.Second)
+	client.SetTimeout(5 * time.Second)
+	// 设置重试次数
+	client.SetRetryCount(2)
+	// 设置重试等待时间
+	client.SetRetryWaitTime(300 * time.Millisecond)
+	// 设置连接和读取超时
+	client.SetTransport(&http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout: 2 * time.Second, // 设置连接超时
+		}).DialContext,
+		ResponseHeaderTimeout: 5 * time.Second, // 设置响应头超时
+	})
+
 	return &Poll{
 		client:    client,
 		blockChan: blockChan,
@@ -91,7 +105,7 @@ func (t *Poll) onRun() {
 		t.blockChan <- *block
 		t.currentBlockNum = int64(block.BlockHeader.RawData.Number + 1)
 	}
-	time.Sleep(1000 * time.Millisecond)
+	time.Sleep(300 * time.Millisecond)
 }
 
 // Stop poll polls the TronScan API

@@ -1,4 +1,4 @@
-FROM alpine:3.18.4
+FROM docker.object.cool/alpine:3.18.4
 
 ARG PROJECT=tron-scan
 ARG CONFIG_FILE=tron-api.yaml

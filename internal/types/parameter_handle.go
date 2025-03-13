@@ -40,15 +40,32 @@ type TriggerSmartContract struct {
 }
 
 func NewTriggerSmartContract(value map[string]interface{}) *TriggerSmartContract {
+	var ok bool
 	contract := &TriggerSmartContract{}
-	contract.ContractAddress = AddressByBase58(value["contract_address"].(string))
-	contract.OwnerAddress = AddressByBase58(value["owner_address"].(string))
-	contract.Data = value["data"].(string)
+	cAddr, ok := value["contract_address"].(string)
+	if !ok {
+		return nil
+	}
+	contract.ContractAddress = AddressByBase58(cAddr)
+	oAddr, ok := value["owner_address"].(string)
+	if !ok {
+		return nil
+	}
+	contract.OwnerAddress = AddressByBase58(oAddr)
+	contract.Data, ok = value["data"].(string)
+	if !ok {
+		return nil
+	}
 	// 截取0 - 8位
 
 	contract.DataInfo.FunctionName = contract.Data[0:8]
 	// 如果FunctionName == a9059cbb
 	if contract.DataInfo.FunctionName == "a9059cbb" {
+		// 判断数据长度是否合法
+		if len(contract.Data) < 136 {
+			return nil
+		}
+
 		// 截取8 - 72位
 		contract.DataInfo.ToAddress = AddressByHex(contract.Data[8:72])
 		// 截取72位后面的64位

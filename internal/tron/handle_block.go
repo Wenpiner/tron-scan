@@ -151,7 +151,13 @@ func (t *HandleBlock) HandleTransferContract(blockNum uint64, blockHash string, 
 }
 
 func (t *HandleBlock) HandleTriggerSmartContract(blockNum uint64, blockHash string, transaction types.Transaction) *types.MQTransactionMessage {
+	if len(transaction.RawData.Contract) <= 0 {
+		return nil
+	}
 	contractVal := types.NewTriggerSmartContract(transaction.RawData.Contract[0].Parameter.Value)
+	if contractVal == nil {
+		return nil
+	}
 	// 过滤TRC20交易
 	if contractVal.DataInfo.FunctionName != "a9059cbb" {
 		return nil
