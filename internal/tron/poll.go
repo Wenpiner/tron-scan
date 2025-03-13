@@ -3,12 +3,12 @@ package tron
 import (
 	"errors"
 	"fmt"
+	"github.com/wenpiner/tron-scan/internal/types"
 	"math/rand"
 	"net"
 	"net/http"
 	"strings"
 	"time"
-	"tronScan/internal/types"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/zeromicro/go-zero/core/logx"

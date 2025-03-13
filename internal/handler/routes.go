@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"tronScan/internal/svc"
+	"github.com/wenpiner/tron-scan/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

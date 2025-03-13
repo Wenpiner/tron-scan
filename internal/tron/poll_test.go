@@ -3,8 +3,8 @@ package tron
 import (
 	"errors"
 	"github.com/go-resty/resty/v2"
+	"github.com/wenpiner/tron-scan/internal/types"
 	"testing"
-	"tronScan/internal/types"
 )
 
 func getBlock() (*types.Block, error) {

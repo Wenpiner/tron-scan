@@ -3,10 +3,10 @@ package handler
 import (
 	"net/http"
 
+	"github.com/wenpiner/tron-scan/internal/logic"
+	"github.com/wenpiner/tron-scan/internal/svc"
+	"github.com/wenpiner/tron-scan/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"tronScan/internal/logic"
-	"tronScan/internal/svc"
-	"tronScan/internal/types"
 )
 
 func HealthCheckHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

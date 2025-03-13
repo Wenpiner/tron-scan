@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
+	"github.com/wenpiner/tron-scan/internal/logic"
+	"github.com/wenpiner/tron-scan/internal/svc"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"tronScan/internal/logic"
-	"tronScan/internal/svc"
 )
 
 func GetInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

@@ -1,9 +1,9 @@
 package svc
 
 import (
+	"github.com/wenpiner/tron-scan/internal/config"
+	"github.com/wenpiner/tron-scan/internal/types"
 	"time"
-	"tronScan/internal/config"
-	"tronScan/internal/types"
 )
 
 type ServiceContext struct {

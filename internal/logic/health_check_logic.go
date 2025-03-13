@@ -5,8 +5,8 @@ import (
 	"google.golang.org/grpc/status"
 	"time"
 
-	"tronScan/internal/svc"
-	"tronScan/internal/types"
+	"github.com/wenpiner/tron-scan/internal/svc"
+	"github.com/wenpiner/tron-scan/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

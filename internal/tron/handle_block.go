@@ -3,9 +3,9 @@ package tron
 import (
 	"context"
 	"encoding/json"
-	"tronScan/internal/config"
-	"tronScan/internal/svc"
-	"tronScan/internal/types"
+	"github.com/wenpiner/tron-scan/internal/config"
+	"github.com/wenpiner/tron-scan/internal/svc"
+	"github.com/wenpiner/tron-scan/internal/types"
 
 	"github.com/rabbitmq/amqp091-go"
 	"github.com/wenpiner/rabbitmq-go"
@@ -49,7 +49,7 @@ func (t *HandleBlock) Start() {
 }
 
 func (t *HandleBlock) Handle(block types.Block) {
-	// 更新健康信息
+	// 更新区块信息
 	t.svc.UpdateBlockInfo(block)
 
 	channel, err := t.Rabbit.Channel()

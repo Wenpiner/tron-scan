@@ -1,4 +1,4 @@
-module tronScan
+module github.com/wenpiner/tron-scan
 
 go 1.21
 
