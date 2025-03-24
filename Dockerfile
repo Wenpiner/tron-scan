@@ -1,16 +1,20 @@
-FROM docker.object.cool/alpine:3.18.4
+FROM golang:1.21-alpine AS builder
 
-ARG PROJECT=tron-scan
-ARG CONFIG_FILE=tron-api.yaml
 
 WORKDIR /app
-ENV PROJECT=${PROJECT}
-ENV CONFIG_FILE=${CONFIG_FILE}
+
+COPY . ./
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o tron-scan .
+
+FROM alpine:3.18.4
+
+WORKDIR /app
 
 ENV TZ=UTC
 RUN apk update --no-cache && apk add --no-cache tzdata
 
-COPY ./${PROJECT} ./
-COPY ./etc/${CONFIG_FILE} ./etc/
+COPY --from=builder /app/tron-scan ./
+COPY ./etc/tron-api.yaml ./etc/
 
-ENTRYPOINT ./${PROJECT} -f etc/${CONFIG_FILE}
+ENTRYPOINT ["/app/tron-scan", "-f", "/app/etc/tron-api.yaml"]

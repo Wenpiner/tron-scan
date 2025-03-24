@@ -20,13 +20,15 @@ type (
 	}
 
 	MQTransactionMessage struct {
-		Hash      string `json:"hash"`
-		BlockNum  uint64 `json:"blockNum"`
-		Amount    int64  `json:"amount"`
-		Contract  string `json:"contract"`
-		BlockHash string `json:"blockHash"`
-		FromAddr  string `json:"fromAddr"`
-		ToAddr    string `json:"toAddr"`
-		Datetime  int64  `json:"datetime"`
+		Hash         string        `json:"hash"`
+		BlockNum     uint64        `json:"blockNum"`
+		Amount       int64         `json:"amount"`
+		Contract     string        `json:"contract"`
+		BlockHash    string        `json:"blockHash"`
+		FromAddr     string        `json:"fromAddr"`
+		ToAddr       string        `json:"toAddr"`
+		Datetime     int64         `json:"datetime"`
+		FunctionName string        `json:"functionName"`
+		Values       []interface{} `json:"values"`
 	}
 )

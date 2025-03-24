@@ -6,17 +6,23 @@ RabbitConf:
   Username: ${RABBITMQ_USER}
   Password: ${RABBITMQ_PASS}
   Host: ${RABBITMQ_HOST}
-  Port: ${RABBITMQ_PORT}
+  Port: 5432
   Vhost: ${RABBITMQ_VHOST}
-  Scheme: ${RABBITMQ_SCHEME}
+  Scheme: amqp
 MQ:
   BlockExchangeName: ${RABBITMQ_BLOCK_EXCHANGE_NAME}
   BlockRouteKey: ${RABBITMQ_BLOCK_ROUTE_KEY}
   TransactionExchangeName: ${RABBITMQ_TRANSACTION_EXCHANGE_NAME}
   TransactionRouteKey: ${RABBITMQ_TRANSACTION_ROUTE_KEY}
 
-APIKey: ${API_KEY}
+APIKey: 8dbd3678a0944a8fb1bb108ccb8491d5
 
 Log:
   Encoding: plain
   Stat: false
+  Level: debug
+
+TransferContract: false
+TriggerSmartContractFunctions:
+  transfer: true
+  approve: false

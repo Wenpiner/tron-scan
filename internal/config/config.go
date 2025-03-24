@@ -15,4 +15,7 @@ type Config struct {
 		TransactionExchangeName string
 		TransactionRouteKey     string
 	}
+	// 需要监听的合约函数
+	TriggerSmartContractFunctions map[string]bool
+	TransferContract              bool
 }
