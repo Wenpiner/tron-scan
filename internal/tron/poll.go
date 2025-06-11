@@ -25,6 +25,8 @@ type Poll struct {
 	currentBlockNum int64
 	// apis
 	apis []string
+	// baseUrl
+	baseUrl string
 }
 
 func (t *Poll) randKey() string {
@@ -37,7 +39,7 @@ func (t *Poll) randKey() string {
 }
 
 // NewTronPoll creates a new Poll instance
-func NewTronPoll(apiKey string, blockChan chan types.Block) *Poll {
+func NewTronPoll(baseUrl, apiKey string, blockChan chan types.Block) *Poll {
 	keys := strings.Split(apiKey, ",")
 	if len(keys) == 0 {
 		logx.Error("未配置API KEY")
@@ -62,6 +64,7 @@ func NewTronPoll(apiKey string, blockChan chan types.Block) *Poll {
 		client:    client,
 		blockChan: blockChan,
 		apis:      keys,
+		baseUrl:   baseUrl,
 	}
 }
 
@@ -119,7 +122,7 @@ func (t *Poll) getBlock(num int64) (*types.Block, error) {
 		"visible": true,
 		"num":     num,
 	}
-	url := fmt.Sprintf(`https://go.getblock.io/%s/wallet/getblockbynum`, t.randKey())
+	url := fmt.Sprintf(`%s/wallet/getblockbynum`, t.baseUrl)
 	var block types.Block
 	response, err := t.client.SetHeader("TRON-PRO-API-KEY", t.randKey()).R().SetResult(&block).SetBody(request).Post(url)
 	if err != nil {
@@ -142,7 +145,7 @@ func (t *Poll) getNowBlock() (*types.Block, error) {
 	request := map[string]interface{}{
 		"visible": true,
 	}
-	url := fmt.Sprintf(`https://go.getblock.io/%s/wallet/getnowblock`, t.randKey())
+	url := fmt.Sprintf(`%s/wallet/getnowblock`, t.baseUrl)
 	var block types.Block
 	response, err := t.client.SetHeader("TRON-PRO-API-KEY", t.randKey()).R().SetResult(&block).SetBody(request).Post(url)
 	if err != nil {

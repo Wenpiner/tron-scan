@@ -42,7 +42,7 @@ func main() {
 	handle := tron.NewHandleBlock(blockChan, mq, &c, ctx)
 	sg.Add(handle)
 
-	poll := tron.NewTronPoll(c.APIKey, blockChan)
+	poll := tron.NewTronPoll(c.BaseURL, c.APIKey, blockChan)
 	sg.Add(poll)
 
 	// 打印开启的方法

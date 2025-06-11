@@ -9,6 +9,7 @@ type Config struct {
 	rest.RestConf
 	RabbitConf conf.RabbitConf
 	APIKey     string
+	BaseURL    string
 	MQ         struct {
 		BlockExchangeName       string
 		BlockRouteKey           string
